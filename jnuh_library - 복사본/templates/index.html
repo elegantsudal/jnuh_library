@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어린이 도서 추천</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-authenticated="{{ 'true' if current_user else 'false' }}">
+    <div class="page-shell">
+        <section class="main-panel">
+            {% if current_user %}
+            <div class="app-panel">
+                <header class="app-header">
+                    <div>
+                        <p class="welcome-label">환영합니다</p>
+                        <h2>{{ current_user.username }} 님</h2>
+                        <p class="welcome-subtitle">{{ current_user.email }}</p>
+                    </div>
+                    <div class="profile-area">
+                        <button type="button" id="profileButton" class="profile-button" aria-expanded="false" aria-controls="profilePanel">
+                            <span>{{ profile_initial }}</span>
+                        </button>
+
+                        <section id="profilePanel" class="profile-panel hidden" aria-hidden="true">
+                            <div class="profile-card">
+                                <div class="profile-summary">
+                                    <div class="profile-avatar">{{ profile_initial }}</div>
+                                    <div>
+                                        <strong>{{ current_user.username }}</strong>
+                                        <p>{{ current_user.email }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="profile-total">
+                                    <span>총 경험치</span>
+                                    <strong>XP {{ total_xp }}</strong>
+                                </div>
+
+                                {% if activity_error %}
+                                <div class="theme-empty">
+                                    <p>{{ activity_error }}</p>
+                                </div>
+                                {% else %}
+                                <div class="profile-xp-list">
+                                    {% for stat in theme_stats %}
+                                    <article class="profile-xp-item">
+                                        <div>
+                                            <div class="profile-xp-heading">
+                                                <strong>{{ stat.theme_name }}</strong>
+                                                {% if stat.theme_title %}
+                                                <span class="theme-title-badge">{{ stat.theme_title }}</span>
+                                                {% endif %}
+                                            </div>
+                                            <p>{{ stat.description }}</p>
+                                        </div>
+                                        <span class="xp-pill">XP {{ stat.xp_points }}</span>
+                                    </article>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="profile-history">
+                                    <h3>최근 기록</h3>
+                                    {% if recent_records %}
+                                    <div class="profile-history-list">
+                                        {% for record in recent_records %}
+                                        <article class="profile-history-item">
+                                            <div class="recent-topline">
+                                                <strong>{{ record.book_title }}</strong>
+                                                <span class="xp-pill subtle">{{ record.theme_name }}</span>
+                                            </div>
+                                            <p>{{ record.reflection or "짧은 감상 없이 제목만 기록했습니다." }}</p>
+                                        </article>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    <div class="theme-empty">
+                                        <p>아직 남긴 기록이 없습니다.</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+
+                                <button type="button" id="logoutButton" class="ghost-button profile-logout">로그아웃</button>
+                            </div>
+                        </section>
+                    </div>
+                </header>
+
+                <section class="search-panel">
+                    <div class="search-box">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="책 제목이나 주제를 입력해주세요"
+                            autocomplete="off"
+                        >
+                        <button type="button" id="searchButton">검색</button>
+                    </div>
+                    <p class="hint-text">알라딘 도서 검색 기준으로 추천합니다. 책 제목으로 검색해도 결과 카드에서 바로 기록을 남길 수 있어요.</p>
+                </section>
+
+                <div class="discovery-layout">
+                    <section class="theme-section theme-sidebar">
+                    <div class="section-heading">
+                        <div>
+                            <p class="welcome-label">탐구 테마</p>
+                            <h3>관심 테마를 골라 탐구를 시작해보세요</h3>
+                        </div>
+                        <p class="hint-text">테마를 누르면 주제 검색이 실행됩니다. 책 제목 검색 결과도 같은 방식으로 기록할 수 있습니다.</p>
+                    </div>
+
+                    <div class="theme-container">
+                        {% for theme in theme_cards %}
+                        <button type="button" class="theme-item" data-theme="{{ theme.name }}">
+                            <div class="theme-icon">
+                                <img src="{{ url_for('static', filename=theme.image) }}" alt="{{ theme.name }}">
+                            </div>
+                            <strong>{{ theme.name }}</strong>
+                            <p>{{ theme.description }}</p>
+                        </button>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <div id="results" class="results">
+                    <p class="message">로그인되었습니다. 검색어를 입력하거나 테마를 선택해보세요.</p>
+                </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button type="button" class="auth-tab active" data-target="loginForm">로그인</button>
+                    <button type="button" class="auth-tab" data-target="signupForm">회원가입</button>
+                </div>
+
+                <form id="loginForm" class="auth-form active">
+                    <h2>로그인</h2>
+                    <p class="form-copy">등록한 아이디와 비밀번호로 로그인하세요.</p>
+                    <label for="loginUsername">아이디</label>
+                    <input type="text" id="loginUsername" name="username" placeholder="아이디 입력" required>
+                    <label for="loginPassword">비밀번호</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="비밀번호 입력" required>
+                    <p id="loginMessage" class="form-message" aria-live="polite"></p>
+                    <button type="submit" class="primary-button">로그인</button>
+                </form>
+
+                <form id="signupForm" class="auth-form">
+                    <h2>회원가입</h2>
+                    <p class="form-copy">새 계정을 만들고 추천 도서 검색을 시작하세요.</p>
+                    <label for="signupUsername">아이디</label>
+                    <input type="text" id="signupUsername" name="username" placeholder="3자 이상" required>
+                    <label for="signupEmail">이메일</label>
+                    <input type="email" id="signupEmail" name="email" placeholder="example@email.com" required>
+                    <label for="signupPassword">비밀번호</label>
+                    <input type="password" id="signupPassword" name="password" placeholder="8자 이상" required>
+                    <label for="signupConfirmPassword">비밀번호 확인</label>
+                    <input type="password" id="signupConfirmPassword" name="confirm_password" placeholder="비밀번호 다시 입력" required>
+                    <p id="signupMessage" class="form-message" aria-live="polite"></p>
+                    <button type="submit" class="primary-button">회원가입</button>
+                </form>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+
+    {% if current_user %}
+    <div id="recordModal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" data-close-record-modal="true"></div>
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="recordModalTitle">
+            <div class="modal-header">
+                <div>
+                    <p class="welcome-label">도서 기록</p>
+                    <h3 id="recordModalTitle">이 책으로 탐구 기록 남기기</h3>
+                </div>
+                <button type="button" id="closeRecordModal" class="modal-close" aria-label="닫기">×</button>
+            </div>
+
+            <form id="recordForm" class="record-form">
+                <label for="recordTheme">기록할 테마</label>
+                <select id="recordTheme" name="theme_name" required>
+                    <option value="">테마를 선택해주세요</option>
+                    {% for theme in theme_cards %}
+                    <option value="{{ theme.name }}">{{ theme.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="bookTitle">읽은 책 제목</label>
+                <input
+                    type="text"
+                    id="bookTitle"
+                    name="book_title"
+                    placeholder="검색 결과에서 선택한 책 제목이 들어갑니다"
+                    maxlength="255"
+                    required
+                >
+
+                <label for="reflection">짧은 감상</label>
+                <textarea
+                    id="reflection"
+                    name="reflection"
+                    rows="5"
+                    maxlength="1000"
+                    placeholder="기억에 남은 장면이나 함께 나누고 싶은 생각을 적어보세요"
+                ></textarea>
+
+                <p class="hint-text modal-hint">기록 1개당 XP {{ xp_per_record }}점이 해당 테마에 쌓입니다.</p>
+                <p id="recordMessage" class="form-message" aria-live="polite"></p>
+                <button type="submit" class="primary-button">기록 남기고 XP 받기</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

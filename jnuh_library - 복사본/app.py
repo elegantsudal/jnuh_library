@@ -115,23 +115,24 @@ def get_aladin_api_key():
         or os.getenv("TTB_KEY")
     )
 
-
 def get_db_config(autocommit=True):
     config = {
-        "host": os.getenv("DB_HOST", "localhost"),
+        "host": os.getenv("DB_HOST"),
         "port": int(os.getenv("DB_PORT", "3306")),
-        "user": os.getenv("DB_USER", ""),
-        "password": os.getenv("DB_PASSWORD", ""),
-        "database": os.getenv("DB_NAME", "users"),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
+        "database": os.getenv("DB_NAME"),
         "charset": "utf8mb4",
         "cursorclass": DictCursor,
         "autocommit": autocommit,
     }
 
-    missing = [key for key in ("user",) if not config[key]]
+    missing = [key for key, value in config.items()
+               if key in ("host", "user", "password", "database") and not value]
+
     if missing:
         raise RuntimeError(
-            "데이터베이스 설정이 비어 있습니다. .env 파일에 DB_USER, DB_NAME 등을 채워주세요."
+            f"데이터베이스 설정 누락: {', '.join(missing)}"
         )
 
     return config

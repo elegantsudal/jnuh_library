@@ -571,7 +571,8 @@ def signup():
         return jsonify({"ok": False, "message": str(exc)}), 500
     except IntegrityError:
         return jsonify({"ok": False, "message": "이미 등록된 회원 정보입니다."}), 409
-    except MySQLError:
+    except MySQLError as e:
+        print("MYSQL ERROR:", e)
         return jsonify(
             {
                 "ok": False,

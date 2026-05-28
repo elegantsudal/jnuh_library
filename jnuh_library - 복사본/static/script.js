@@ -183,15 +183,7 @@ function initializeProfilePanel() {
         }
     });
     
-    document.querySelectorAll(".profile-xp-item").forEach((item) => {
-    item.addEventListener("click", () => {
-        const detail = item.querySelector(".theme-detail");
 
-        if (detail) {
-            detail.classList.toggle("hidden");
-        }
-    });
-});
 }
 
 function initializeRecordForm() {
@@ -438,31 +430,21 @@ function escapeHtml(value) {
 
 
 
-// 테마 카드 클릭 시 상세 기록 열기/닫기
 function initializeThemeDetailToggle() {
-
-    // 모든 테마 경험치 카드 선택
     const themeItems = document.querySelectorAll(".profile-xp-item");
 
     themeItems.forEach((item) => {
+        const detail = item.querySelector(".theme-detail");
+
+        if (!detail) return;
 
         item.addEventListener("click", () => {
-
-            // 현재 카드 내부 상세 기록
-            const detail = item.querySelector(".theme-detail");
-
-            if (!detail) {
-                return;
-            }
-
-            // 다른 카드 닫기
-            document.querySelectorAll(".theme-detail").forEach((otherDetail) => {
-                if (otherDetail !== detail) {
-                    otherDetail.classList.add("hidden");
+            document.querySelectorAll(".theme-detail").forEach((d) => {
+                if (d !== detail) {
+                    d.classList.add("hidden");
                 }
             });
 
-            // 현재 카드 토글
             detail.classList.toggle("hidden");
         });
     });

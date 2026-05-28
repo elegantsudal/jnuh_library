@@ -43,21 +43,52 @@
                                 </div>
                                 {% else %}
                                 <div class="profile-xp-list">
+                                    
                                     {% for stat in theme_stats %}
-                                    <article class="profile-xp-item">
+                                    <article class="profile-xp-item" data-theme="{{ stat.theme_name}}">
                                         <div>
-                                            <div class="profile-xp-heading">
+                                            <div class= "profile-xp-heading">
                                                 <strong>{{ stat.theme_name }}</strong>
+
                                                 {% if stat.theme_title %}
-                                                <span class="theme-title-badge">{{ stat.theme_title }}</span>
+                                                <span class= "theme-title-badge">
+                                                    {{ stat.theme_title }}
+                                                </span>
                                                 {% endif %}
                                             </div>
                                             <p>{{ stat.description }}</p>
                                         </div>
-                                        <span class="xp-pill">XP {{ stat.xp_points }}</span>
+
+                                        <span class="xp-pill">
+                                            XP {{ stat.xp_points }}
+                                        </span>
+
+                                        <div class="theme-detail hidden">
+                                            <h4>{{ stat.theme_name }} 기록</h4>
+
+                                            {% for record in recent_records %}
+                                                {% if record.theme_name == stat.theme_name %}
+
+                                                <div class="theme-record">
+                                                    <strong>{{ record.book_title }}</strong>
+
+                                                    <p>
+                                                        {{ record.reflection or "해당 테마의 책을 읽어 기록을 추가해보세요!" }}
+                                                    </p>
+                                                </div>
+
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
                                     </article>
                                     {% endfor %}
                                 </div>
+        
+                        
+
+                                            
+
+  
 
                                 <div class="profile-history">
                                     <h3>기록 저장소</h3>

@@ -110,13 +110,9 @@ EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 def get_aladin_api_key():
     return (
-        os.getenv("ALADIN_API_KEY")
-        or os.getenv("ALADIN_TTB_KEY")
-        or os.getenv("TTB_KEY")
-    )
+        os.getenv("ALADIN_API_KEY")    )
 
 def get_db_config(autocommit=True):
-    print("DB_HOST:", os.getenv("DB_HOST"))
     config = {
         "host": os.getenv("DB_HOST"),
         "port": int(os.getenv("DB_PORT", "3306")),
@@ -625,7 +621,7 @@ def logout():
 def record_book():
     current_user = get_current_user()
     if not current_user:
-        return jsonify({"ok": False, "message": "로그인 후 기록을 남겨주세요."}), 401
+        return jsonify({"ok": False, "message": "로그인 후 기록을 남기러 가볼까요~~?!"}), 401
 
     data = get_json_payload()
     theme_name = (data.get("theme_name") or "").strip()
@@ -635,7 +631,7 @@ def record_book():
     allowed_theme_names = {theme["name"] for theme in DEFAULT_THEME_CARDS}
 
     if theme_name not in allowed_theme_names:
-        return jsonify({"ok": False, "message": "테마를 먼저 선택해주세요."}), 400
+        return jsonify({"ok": False, "message": "테마를 선택해주세요."}), 400
 
     if not book_title:
         return jsonify({"ok": False, "message": "읽은 책 제목을 입력해주세요."}), 400
@@ -664,7 +660,7 @@ def record_book():
     return jsonify(
         {
             "ok": True,
-            "message": f"{saved['theme_name']} 테마에 기록을 남겼습니다. XP {XP_PER_RECORD}점을 획득했어요.",
+            "message": f"{saved['theme_name']} 기록이 되었어요! XP {XP_PER_RECORD}점을 획득했어요.",
             "theme_name": saved["theme_name"],
             "xp_points": saved["xp_points"],
         }
@@ -674,7 +670,7 @@ def record_book():
 @app.route("/search")
 def search():
     if not get_current_user():
-        return jsonify({"error": "로그인 후 도서 검색을 이용해주세요.", "books": []}), 401
+        return jsonify({"error": "로그인을 먼저 해주세요", "books": []}), 401
 
     query = (request.args.get("q") or "").strip()
     query_type = (request.args.get("queryType") or "Title").strip()
@@ -690,7 +686,7 @@ def search():
         return (
             jsonify(
                 {
-                    "error": ".env 파일에 ALADIN_API_KEY를 설정해주세요.",
+                    "error": "ALADIN_API_KEY 에러났다 정신 똑띠 차려라",
                     "books": [],
                 }
             ),
@@ -716,7 +712,7 @@ def search():
         app.logger.warning("Aladin API request failed: %s", exc)
         return jsonify({"error": get_aladin_request_error_message(exc), "books": []}), 502
     except ValueError:
-        return jsonify({"error": "알라딘 API 응답을 해석할 수 없습니다.", "books": []}), 502
+        return jsonify({"error": "알라딘 개새끼", "books": []}), 502
 
     error_message = get_aladin_error_message(data)
     if error_message:

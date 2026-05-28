@@ -781,6 +781,47 @@ textarea:focus {
     margin-top: 14px;
 }
 
+.theme-detail {
+    width: 100%;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(200, 223, 244, 0.9);
+}
+.theme-detail.hidden {
+    display: none;
+}
+
+.theme-record {
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(240, 248, 255, 0.8);
+}
+
+.theme-record strong {
+    display: block;
+    color: var(--primary-dark);
+}
+
+.theme-record p {
+    margin:0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @media (max-width: 1080px) {
     .hero-panel,
     .main-panel {
@@ -836,7 +877,9 @@ textarea:focus {
 
     .profile-xp-item {
         flex-direction: column;
+        cursor : pointer;
     }
+
 
     .search-box {
         grid-template-columns: 1fr;

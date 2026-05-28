@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>어린이 도서 추천</title>
+    <title>어린이 도서 웹사이트</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body data-authenticated="{{ 'true' if current_user else 'false' }}">
@@ -107,7 +107,7 @@
                             <p class="welcome-label">탐구 테마</p>
                             <h3>관심 테마를 골라 탐구를 시작해보세요</h3>
                         </div>
-                        <p class="hint-text">테마를 누르면 주제 검색이 실행됩니다. 책 제목 검색 결과도 같은 방식으로 기록할 수 있습니다.</p>
+                        <p class="hint-text">테마를 누르거나 도서 제목을 검색하세요.</p>
                     </div>
 
                     <div class="theme-container">
@@ -124,7 +124,7 @@
                 </section>
 
                 <div id="results" class="results">
-                    <p class="message">로그인되었습니다. 검색어를 입력하거나 테마를 선택해보세요.</p>
+                    <p class="message">검색어를 입력하거나 테마를 선택해보세요.</p>
                 </div>
                 </div>
             </div>
@@ -148,7 +148,7 @@
 
                 <form id="signupForm" class="auth-form">
                     <h2>회원가입</h2>
-                    <p class="form-copy">새 계정을 만들고 추천 도서 검색을 시작하세요.</p>
+                    <p class="form-copy">계정을 만들어 봅시다!</p>
                     <label for="signupUsername">아이디</label>
                     <input type="text" id="signupUsername" name="username" placeholder="3자 이상" required>
                     <label for="signupEmail">이메일</label>

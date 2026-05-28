@@ -326,16 +326,15 @@ textarea:focus {
 }
 
 .profile-button {
-    width: 52px;
-    height: 52px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: #ffffff;
     box-shadow: 0 12px 24px rgba(30, 144, 169, 0.22);
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
 }
 
 .profile-panel {

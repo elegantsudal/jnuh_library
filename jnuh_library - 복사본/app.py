@@ -116,6 +116,7 @@ def get_aladin_api_key():
     )
 
 def get_db_config(autocommit=True):
+    print("DB_HOST:", os.getenv("DB_HOST"))
     config = {
         "host": os.getenv("DB_HOST"),
         "port": int(os.getenv("DB_PORT", "3306")),

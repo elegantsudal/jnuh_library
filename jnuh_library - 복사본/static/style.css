@@ -417,7 +417,7 @@ textarea:focus {
 
 .profile-xp-item {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     justify-content: space-between;
     gap: 12px;
 }

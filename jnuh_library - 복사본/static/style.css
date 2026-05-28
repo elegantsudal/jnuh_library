@@ -786,6 +786,7 @@ textarea:focus {
     margin-top: 14px;
     padding-top: 14px;
     border-top: 1px solid rgba(200, 223, 244, 0.9);
+    display: block;
 }
 .theme-detail.hidden {
     display: none;
@@ -878,6 +879,7 @@ textarea:focus {
     .profile-xp-item {
         flex-direction: column;
         cursor : pointer;
+        width: 100%;
     }
 
 

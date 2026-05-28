@@ -183,12 +183,15 @@ function initializeProfilePanel() {
         }
     });
     
-    document.querySelectorALL(".profile-xp-item").forEach((item)) => {
-        item.addEventListener("click", () => {
-            const detail = item.querySelector(".theme-detail");
+    document.querySelectorAll(".profile-xp-item").forEach((item) => {
+    item.addEventListener("click", () => {
+        const detail = item.querySelector(".theme-detail");
+
+        if (detail) {
             detail.classList.toggle("hidden");
-        });
+        }
     });
+});
 }
 
 function initializeRecordForm() {

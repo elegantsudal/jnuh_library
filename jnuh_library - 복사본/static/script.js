@@ -181,6 +181,13 @@ function initializeProfilePanel() {
             closeRecordModal();
         }
     });
+    
+    document.querySelectorALL(".profile-xp-item").forEach((item)) => {
+        item.addEventListener("click", () => {
+            const detail = item.querySelector(".theme-detail");
+            detail.classList.toggle("hidden");
+        });
+    });
 }
 
 function initializeRecordForm() {
@@ -424,3 +431,4 @@ function escapeHtml(value) {
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#39;");
 }
+
